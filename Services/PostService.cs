@@ -60,9 +60,10 @@ namespace BlogCore.Services
             return await _blogDbContext.Posts.ToListAsync();
         }
 
-        public async Task<Post> GetPost(int? id)
+        //id should not be nullable so no need for int? id
+        public async Task<Post> GetPost(int id)
         {
-            var postDetail = await _blogDbContext.Posts.FirstOrDefaultAsync(post => post.Id == id);
+            var postDetail = await _blogDbContext.Posts.FirstAsync(post => post.Id == id);
             return postDetail;
         }
 

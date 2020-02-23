@@ -16,7 +16,8 @@ namespace BlogCore.Services
 
          Task<bool> EditPostAsync(EditPostViewModel post);
 
-         Task<Post> GetPost(int? id);
+        //id should not be nullable so no need for int? id
+         Task<Post> GetPost(int id);
          
 
     }

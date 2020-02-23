@@ -42,7 +42,7 @@ namespace BlogCore.Controllers
         {
             if(id == null) 
             {
-                return View(new EditPostViewModel());
+                return BadRequest("400 Bad Request");
             }
             else
             {
@@ -61,7 +61,6 @@ namespace BlogCore.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditPostViewModel post)
         {
             if(!ModelState.IsValid)
@@ -81,7 +80,6 @@ namespace BlogCore.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreatePostViewModel newPost)
         {
             if(!ModelState.IsValid)
