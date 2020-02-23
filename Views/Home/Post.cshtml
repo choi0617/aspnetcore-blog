@@ -1,0 +1,25 @@
+@model PostViewModel
+@{
+    ViewData["Title"] = "Posts";
+}
+
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Title</td>
+            </tr>
+        </thead>
+
+    @foreach (var post in Model.Posts)
+    {
+        <tr>
+            <td>@post.Id</td>
+            <td><a asp-controller="Home" asp-action="Detail" asp-route-id="@post.Id">@post.Title</a></td>
+            <td><a asp-controller="Home" asp-action="Delete" asp-route-id="@post.Id">Delete</a></td>
+        </tr>
+    }
+
+    </table>
+</div>
