@@ -70,7 +70,12 @@ namespace BlogCore.Controllers
                 return RedirectToAction("Post");
             }
 
-            var postToUpdate = await _postService.EditPostAsync(post);
+            var successful = await _postService.EditPostAsync(post);
+
+            if(!successful)
+            {
+                return BadRequest("Could not edit post");
+            }
 
             return RedirectToAction("Detail", new {id = post.Id });
         }
