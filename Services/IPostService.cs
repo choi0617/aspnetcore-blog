@@ -12,8 +12,6 @@ namespace BlogCore.Services
 
          Task<bool> RemovePostAsync(int id);
 
-         //Task<bool> EditPostAsync(Post post); (original)
-
          Task<bool> EditPostAsync(EditPostViewModel post);
 
         //id should not be nullable so no need for int? id

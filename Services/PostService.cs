@@ -30,15 +30,6 @@ namespace BlogCore.Services
 
         }
 
-        // public async Task<bool> EditPostAsync(Post post)  ORIGINAL
-        // {
-        //     _blogDbContext.Posts.Update(post);
-
-        //     var saveResult = await _blogDbContext.SaveChangesAsync();
-
-        //     return saveResult == 1;
-        // }
-
         public async Task<bool> EditPostAsync(EditPostViewModel post)
         {
             
