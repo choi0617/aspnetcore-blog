@@ -97,9 +97,20 @@ namespace BlogCore.Controllers
             return RedirectToAction("Post");
         }
 
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> Detail(int? id)
         {
-            var model = await _postService.GetPost(id);
+            if(id == null)
+            {
+                return RedirectToAction("Post");
+            }
+            var post = await _postService.GetPost((int)id);
+            var model = new DetailPostViewModel
+            {
+                Id = post.Id,
+                Title = post.Title,
+                BodyText = post.BodyText,
+                Created = post.Created,
+            };
             return View(model);
         }
 
