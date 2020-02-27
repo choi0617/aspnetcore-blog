@@ -46,7 +46,7 @@ namespace BlogCore.Controllers
                 }
             }   
 
-            return View();
+            return RedirectToAction("Post", "Home");
         }
 
         [HttpGet]
@@ -70,7 +70,14 @@ namespace BlogCore.Controllers
                 ModelState.AddModelError("", "Invalid Login");
             }
 
-            return View();
+            return RedirectToAction("Post", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
     }

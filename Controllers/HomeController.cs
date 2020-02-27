@@ -72,7 +72,7 @@ namespace BlogCore.Controllers
 
             var postToUpdate = await _postService.EditPostAsync(post);
 
-            return RedirectToAction("Post");
+            return RedirectToAction("Detail", new {id = post.Id });
         }
 
         [Authorize]
