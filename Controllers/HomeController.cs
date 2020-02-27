@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BlogCore.Models;
 using BlogCore.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlogCore.Controllers
 {
@@ -37,6 +38,7 @@ namespace BlogCore.Controllers
             return View(model);   
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -73,6 +75,7 @@ namespace BlogCore.Controllers
             return RedirectToAction("Post");
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Create()
         {
