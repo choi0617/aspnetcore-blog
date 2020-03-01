@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using BlogCore.Models;
 using BlogCore.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlogCore.Controllers
 {
@@ -15,21 +16,31 @@ namespace BlogCore.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IPostService _postService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, IPostService postService)
+        public HomeController(ILogger<HomeController> logger, IPostService postService, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _postService = postService;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var posts = await _postService.GetAllPostsAsync();
+            var model = new PostViewModel()
+            {
+                Posts = posts
+            };
+
+            return View(model);  
         }
 
         public async Task<IActionResult> Post()
         {
-            var posts = await _postService.GetAllPostsAsync();
+            var currentUser = await _userManager.GetUserAsync(User);
+            if(currentUser == null) return Challenge();
+            var posts = await _postService.GetAllUserPostsAsync(currentUser);
             var model = new PostViewModel()
             {
                 Posts = posts
@@ -65,12 +76,15 @@ namespace BlogCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditPostViewModel post)
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if(currentUser == null) return Challenge();
+
             if(!ModelState.IsValid)
             {
                 return RedirectToAction("Post");
             }
 
-            var successful = await _postService.EditPostAsync(post);
+            var successful = await _postService.EditPostAsync(post, currentUser);
 
             if(!successful)
             {
@@ -89,13 +103,16 @@ namespace BlogCore.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create(CreatePostViewModel newPost)
-        {
+        {   
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return Challenge();
+
             if(!ModelState.IsValid)
             {
                 return RedirectToAction("Index");
             }
 
-            var successful = await _postService.CreatePostAsync(newPost);
+            var successful = await _postService.CreatePostAsync(newPost, currentUser);
 
             if(!successful)
             {
