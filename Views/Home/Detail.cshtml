@@ -1,3 +1,4 @@
+@inject SignInManager<IdentityUser> signInManager;
 @model DetailPostViewModel
 
 @{
@@ -10,11 +11,14 @@
         <div class="col blog-main">
             <div class="blog-post">
             <h2 class="blog-post-title">@Model.Title</h2>
-            <p class="blog-post-meta">@Model.Created by <a href="#">Some User</a></p>
+            <p class="blog-post-meta">@Model.Created by <a href="#">@Model.UserName</a></p>
 
             <p>@Model.BodyText</p>
-            <a asp-route-id="@Model.Id" asp-controller="Home" asp-action="Delete">Delete</a>
-            <a asp-route-id="@Model.Id" asp-controller="Home" asp-action="Edit">Edit</a>
+            @if(signInManager.IsSignedIn(User))
+            {
+                <a asp-route-id="@Model.Id" asp-controller="Home" asp-action="Delete">Delete</a>
+                <a asp-route-id="@Model.Id" asp-controller="Home" asp-action="Edit">Edit</a>
+            }     
         </div><!-- /.blog-post -->
     </div><!-- /.row -->
 </div>

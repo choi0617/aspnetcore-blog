@@ -8,5 +8,7 @@ namespace BlogCore.Models
         public string Title { get; set; }
         public string BodyText { get; set; }
         public DateTime Created { get; set; } 
+
+        public string UserName {get; set;}
     }
 }

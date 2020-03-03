@@ -8,26 +8,31 @@
 </div>
 
 <div class="container">
+    
+    @if(Model.Posts.Count() == 0)
+    {
+        <h3>No posts available</h3>
+    } else 
+    {
     <table class="table table-hover">
         <thead>
             <tr>
-                <td>Author</td>
                 <td>Title</td>
+                <td>Author</td>
             </tr>
         </thead>
 
+    
     @foreach (var post in Model.Posts)
     {
         <tr>
+            <td><a asp-action="Detail" asp-controller="Home" asp-route-id="@post.Id">@post.Title</a></td>
             <td>@post.User.UserName</td>
-            <td>@post.Title</td>
         </tr>
-    }
-
+    } 
     </table>
+    }  
 </div>
 
 
-<div class="container text-center">
-    <a type="button" class="btn btn-primary btn-lg" asp-action="Create">Create a post</a>
-</div>
+

@@ -66,7 +66,9 @@ namespace BlogCore.Services
         //id should not be nullable so no need for int? id
         public async Task<Post> GetPost(int id)
         {
-            var postDetail = await _blogDbContext.Posts.FirstAsync(post => post.Id == id);
+            var postDetail = await _blogDbContext.Posts
+                    .Include(x => x.User)
+                    .FirstAsync(post => post.Id == id);
             return postDetail;
         }
 

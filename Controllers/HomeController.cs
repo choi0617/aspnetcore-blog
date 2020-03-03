@@ -135,10 +135,12 @@ namespace BlogCore.Controllers
                 Title = post.Title,
                 BodyText = post.BodyText,
                 Created = post.Created,
+                UserName = post.User.UserName,
             };
             return View(model);
         }
 
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             await _postService.RemovePostAsync(id);
