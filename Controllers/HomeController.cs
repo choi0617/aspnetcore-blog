@@ -57,10 +57,11 @@ namespace BlogCore.Controllers
             {
                 return BadRequest("400 Bad Request");
             }
-            else
+            var currentUserId = _userManager.GetUserId(User);
+            var post = await _postService.GetUserPost((int)id, currentUserId);
+            
+            if(post != null)
             {
-                var post = await _postService.GetPost((int)id);
-                
                 var updatedPost = new EditPostViewModel()
                 {
                     Id = post.Id,
@@ -69,20 +70,20 @@ namespace BlogCore.Controllers
                 };
 
                 return View(updatedPost);
-
-            }
+            }     
+            
+            return BadRequest("Not permitted to edit another person's post");
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditPostViewModel post)
         {
-            var currentUser = await _userManager.GetUserAsync(User);
-            if(currentUser == null) return Challenge();
-
             if(!ModelState.IsValid)
             {
                 return RedirectToAction("Post");
             }
+            var currentUser = await _userManager.GetUserAsync(User);
+            if(currentUser == null) return Challenge();
 
             var successful = await _postService.EditPostAsync(post, currentUser);
 
@@ -141,9 +142,21 @@ namespace BlogCore.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            await _postService.RemovePostAsync(id);
+            if(id == null)
+            {
+                return BadRequest($"Could not find post");
+            }
+
+            var currentUserId = _userManager.GetUserId(User);
+
+            var successful = await _postService.RemovePostAsync((int)id, currentUserId);
+
+            if(!successful)
+            {
+                return BadRequest("Could not delete");
+            }
             return RedirectToAction("Post");
         }
 

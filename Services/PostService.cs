@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -72,13 +73,23 @@ namespace BlogCore.Services
             return postDetail;
         }
 
-        public async Task<bool> RemovePostAsync(int id)
+        public async Task<Post> GetUserPost(int id, string currentUserId)
         {
-            var postDetail = await GetPost(id);
-            _blogDbContext.Posts.Remove(postDetail);
-            var saveResult = await _blogDbContext.SaveChangesAsync();
+            return  await _blogDbContext.Posts.FirstOrDefaultAsync(x => x.Id == id && x.UserId == currentUserId);
+        }
 
-            return saveResult == 1;
+        public async Task<bool> RemovePostAsync(int id, string currentUserId)
+        {
+            var postDetail = await GetUserPost(id, currentUserId);
+
+            if(postDetail != null)
+            {
+                _blogDbContext.Posts.Remove(postDetail);
+                var saveResult = await _blogDbContext.SaveChangesAsync();
+                return saveResult == 1;  
+            }
+            
+            return false;                     
         }
 
     }

@@ -12,12 +12,13 @@ namespace BlogCore.Services
 
          Task<bool> CreatePostAsync(CreatePostViewModel newPost, IdentityUser user);
 
-         Task<bool> RemovePostAsync(int id);
+         Task<bool> RemovePostAsync(int id, string currentUserId);
 
          Task<bool> EditPostAsync(EditPostViewModel post, IdentityUser user);
 
         //id should not be nullable so no need for int? id
          Task<Post> GetPost(int id);
+         Task<Post> GetUserPost(int id, string currentUserId);
          
 
     }
